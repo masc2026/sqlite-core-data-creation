@@ -142,17 +142,162 @@ If the script is used for conversion with other configuration value after the fi
 Three steps to create the Core Data SQLite database *):
 
 
-1.) Create `.momd` from Xcode Core Data model files `.xcdatamodeld`:
+A.) Create `.momd` from Xcode Core Data model files `.xcdatamodeld`:
 
    `/Applications/Xcode.app/Contents/Developer/usr/bin/momc ../datamodel/Taxa.xcdatamodeld ../datamodel`
 
-2.) Create an empty Core Data SQLite database file with the help of `main.swift`:
+B.) Create an empty Core Data SQLite database file with the help of `main.swift`:
    
    `swift main.swift System ../datamodel/Taxa.momd ../datamodel/SYSTEM.sqlite`
 
-3.) Start to convert data and fill the the Core Data SQLite database:
+C.) Start to convert data and fill the the Core Data SQLite database:
 
    `convert.zsh -conf <conf> -username <username> -password <password>`
 
 
-*) Steps 1.) and 2.) are only done once in order to get an empty Core Data SQLite database file
+*) Steps A.) and B.) are only required on the first run to obtain an empty Core Data SQLite database file
+
+## Example
+
+#### Clone the project, open a terninal and change to `sqlite-core-data-creation`
+
+    user@Mac sqlite-core-data-creation % cd <projects>/sqlite-core-data-creation
+
+    user@Mac sqlite-core-data-creation % tree -Dt
+
+    [Jul  8 06:41]  .
+    ├── [Jul  8 06:41]  data
+    ├── [Jul  8 06:41]  datamodel
+    │   └── [Jul 26  2021]  Taxa.xcdatamodeld
+            ...
+    └── [Jul  8 06:41]  src
+        ├── [Jul  2 18:46]  migrate.py
+        ├── [Jul  7 19:35]  main.swift
+        ├── [Jul  7 20:11]  convert.zsh
+        └── [Jul  8 06:03]  configuration.zsh
+
+1.) Download source database `https://www.itis.gov/downloads/itisPostgreSql.zip` and unzip under data:
+
+#### Content of dir `sqlite-core-data-creation`:
+
+    user@Mac sqlite-core-data-creation % tree -Dt
+
+    [Jul  8 06:41]  .
+    ├── [Jul  8 06:41]  data
+    │   └── [Jun 28 17:33]  itisPostgreSql062822
+    │       ├── [Jun 28 17:33]  ITIS.sql
+    │       └── [Jun 28 17:33]  ReadmePostgreSql.txt
+    ├── [Jul  8 06:41]  datamodel
+    │   └── [Jul 26  2021]  Taxa.xcdatamodeld
+            ...
+    └── [Jul  8 06:41]  src
+        ├── [Jul  2 18:46]  migrate.py
+        ├── [Jul  7 19:35]  main.swift
+        ├── [Jul  7 20:11]  convert.zsh
+        └── [Jul  8 06:03]  configuration.zsh
+
+2.) Create `.momd` from Xcode Core Data model files `.xcdatamodeld`:
+
+    user@Mac sqlite-core-data-creation % /Applications/Xcode.app/Contents/Developer/usr/bin/momc ./datamodel/Taxa.xcdatamodeld ./datamodel 
+    
+    ...
+
+#### Content of dir `sqlite-core-data-creation`:
+
+    user@Mac sqlite-core-data-creation % tree -Dt  
+
+    [Jul  8 06:41]  .
+    ├── [Jul  8 06:41]  data
+    │   └── [Jun 28 17:33]  itisPostgreSql062822
+    │       ├── [Jun 28 17:33]  ITIS.sql
+    │       └── [Jun 28 17:33]  ReadmePostgreSql.txt
+    ├── [Jul  8 06:41]  src
+    │   ├── [Jul  2 18:46]  migrate.py
+    │   ├── [Jul  7 19:35]  main.swift
+    │   ├── [Jul  7 20:11]  convert.zsh
+    │   └── [Jul  8 06:03]  configuration.zsh
+    └── [Jul  8 06:55]  datamodel
+        ├── [Jul 26  2021]  Taxa.xcdatamodeld
+            ...
+        └── [Jul  8 06:55]  Taxa.momd
+            ...
+
+3.) Create an empty Core Data SQLite database file:
+
+
+    user@Mac sqlite-core-data-creation % swift ./src/main.swift System ./datamodel/Taxa.momd ./data/SYSTEM.sqlite
+
+    Create Core Data SQLite database file:///Volumes/sambashare/sqlite-core-data-creation/data/SYSTEM.sqlite
+    Use Core Data SQLite database model file:///Volumes/sambashare/sqlite-core-data-creation/datamodel/Taxa.momd/
+    Model version: 61
+    Core Data SQLite database file is compatible
+    Core Data SQLite database file created file:///Volumes/sambashare/sqlite-core-data-creation/data/SYSTEM.sqlite
+
+#### Content of dir `sqlite-core-data-creation`:
+
+    user@Mac sqlite-core-data-creation % tree -Dt
+
+    [Jul  8 06:41]  .
+    ├── [Jul  8 06:41]  src
+    │   ├── [Jul  2 18:46]  migrate.py
+    │   ├── [Jul  7 19:35]  main.swift
+    │   ├── [Jul  7 20:11]  convert.zsh
+    │   └── [Jul  8 06:03]  configuration.zsh
+    ├── [Jul  8 06:55]  datamodel
+    │   ├── [Jul 26  2021]  Taxa.xcdatamodeld
+             ...
+    │   └── [Jul  8 06:55]  Taxa.momd
+             ...
+    └── [Jul  8 06:57]  data
+        ├── [Jun 28 17:33]  itisPostgreSql062822
+        │   ├── [Jun 28 17:33]  ITIS.sql
+        │   └── [Jun 28 17:33]  ReadmePostgreSql.txt
+        └── [Jul  8 06:57]  SYSTEM.sqlite
+    
+4.) Run data migration (!!! The whole run of this example takes about one to two hours, depending on the PostgresSQL server performance !!!)
+
+    user@Mac ./convert.zsh -conf ITIS_1501 -username <username> -password <password>
+    ...
+
+#### Content of dir `sqlite-core-data-creation`:
+
+    user@Mac sqlite-core-data-creation % tree -Dt  
+    [Jul  8 06:41]  .
+    ├── [Jul  8 06:55]  datamodel
+    │   ├── [Jul 26  2021]  Taxa.xcdatamodeld
+             ...
+    │   └── [Jul  8 06:55]  Taxa.momd
+             ...
+    ├── [Jul  8 06:57]  data
+    │   ├── [Jun 28 17:33]  itisPostgreSql062822
+    │   │   ├── [Jun 28 17:33]  ITIS.sql
+    │   │   └── [Jun 28 17:33]  ReadmePostgreSql.txt
+    │   └── [Jul  8 08:17]  SYSTEM.sqlite
+    └── [Jul  8 08:16]  src
+        ├── [Jul  2 18:46]  migrate.py
+        ├── [Jul  7 19:35]  main.swift
+        ├── [Jul  7 20:11]  convert.zsh
+        ├── [Jul  8 06:03]  configuration.zsh
+        ├── [Jul  8 07:08]  __pycache__
+        │   └── [Jul  8 07:08]  migrate.cpython-310.pyc
+        ├── [Jul  8 07:14]  ITIS_220628001_ZPERSON.copy
+        ├── [Jul  8 07:14]  ITIS_220628001_ZRANK.copy
+        ├── [Jul  8 07:14]  ITIS_220628001_ZSPEC.copy
+        ├── [Jul  8 07:52]  tmp1.sql
+        ├── [Jul  8 08:13]  exportZSPEC.sql
+        ├── [Jul  8 08:14]  exportZRANK.sql
+        ├── [Jul  8 08:15]  exportZNAMESIDX.sql
+        └── [Jul  8 08:16]  exportZPERSON.sql
+
+5.) Check
+
+    user@Mac sqlite-core-data-creation % sqlite3 ./data/SYSTEM.sqlite 
+    SQLite version 3.37.0 2021-12-09 01:34:53
+    Enter ".help" for usage hints.
+    sqlite> select count(*) from ZSPEC;
+    631087
+    sqlite> select count(*) from ZNAMESIDX;
+    2895066
+    sqlite> .exit
+
+    user@Mac sqlite-core-data-creation % 
