@@ -159,9 +159,11 @@ C.) Start to convert data and fill the the Core Data SQLite database:
 
 ## Example
 
-#### Clone the project, open a terninal and change to `sqlite-core-data-creation`
+In the terminal, change to `sqlite-core-data-creation`:
 
     user@Mac sqlite-core-data-creation % cd <projects>/sqlite-core-data-creation
+
+#### Content of dir `sqlite-core-data-creation`:
 
     user@Mac sqlite-core-data-creation % tree -Dt
 
@@ -176,7 +178,7 @@ C.) Start to convert data and fill the the Core Data SQLite database:
         ├── [Jul  7 20:11]  convert.zsh
         └── [Jul  8 06:03]  configuration.zsh
 
-1.) Download source database `https://www.itis.gov/downloads/itisPostgreSql.zip` and unzip under data:
+1.) Download source database `https://www.itis.gov/downloads/itisPostgreSql.zip` and unzip it under data:
 
 #### Content of dir `sqlite-core-data-creation`:
 
