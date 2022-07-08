@@ -1,30 +1,30 @@
 # Create SQLite Core Data database file for use and shipping with an iOS app
 
-This project showing the creation of SQLite Core Data with the help of scripts (`zsh`, `Python`, `PL/pgSQL`, `Swift`, `SQLite and PosgreSQL SQL`) is not a ready-to-use solution for similar requirements in your own projects, but many procedures can perhaps be adopted and some architectural features of the script solution should also be usable for others.
+This project showing data migration to a `Core Data` compatible `SQLite` database using scripts (`zsh`, `Python`, `PL/pgSQL`, `Swift`, `SQLite and PosgreSQL SQL`) is not a ready-made solution for similar requirements in other projects, but some procedures can perhaps be adopted and some architectural features of the script solution should be usable for others.
 
 `Core Data` is a propietary persistence framework from Apple for iOS, iPhoneOS, macOS apps.
 
-There are several base technologies that can be managed by `Core Data` for storing data on a file system, one is `SQLite` - and that is what we are using here in this project.
+There are several base technologies that can be managed by `Core Data` for storing data on a file system, one is `SQLite` - and that is what we are using here.
 
-There is no official support or documentation from Apple how to create `Core Data` compliant `SQLite` databases and how to fill them with data using standard `SQL`. `Core Data` even does not have a API that allows `SQL` statements for data change.
+There is no official support or documentation from Apple how to create `Core Data` compatible `SQLite` databases and how to fill them with data using standard `SQL`. `Core Data` even does not have an API that allows `SQL` statements for data manipulation.
 
 Actually `SQLite` files are hidden from the developer and should not be directly created or changed, except with the `Core Data` framework SDK and the `Core Data` modelling tool that is part of `Xcode`.
 
-Because of the lack of documentation, at the beginning, there was a bit of research, investigation and experimentation.
+Due to the lack of documentation, a little research and experimentation was done at the beginning.
 
-So the project shows a well-tested workflow and scripts that work well.
+So the project now shows a well-tested workflow and scripts that work well.
 
-I have often created `Core Data` compliant `SQLite` database files and shipped them directly with my iOS app (up to deployment target `iOS 15.2`) or made them available as in-app purchase assets.
+I have often created `Core Data` compliant `SQLite` database files and shipped them directly with my iOS app [TaxaDB](https://apps.apple.com/de/app/taxadb/id1571018041), which is currently offered in the App Store, and I regularly create new `Core Data` compliant `SQLite` database files to make them available as assets of In-app purchases.
 
 ## Getting started
 
 All sources can be found here [src](/src/), the example `Core Data` model that we use is here [datamodel](/datamodel/).
 
-Much of the complexity of the scripts comes from the relatively complex data models of the source and target databases I am using here. 
+Much of the complexity of the scripts comes from the relatively complex data models of the source and target databases. 
 
 Those who wish to use these scripts for their own implementations with simpler data migration projects will do well with shorter and simpler scripts.
 
-On the other hand, the techniques used - especially when migrating from `PostgreSQL` to `Core Data` `SQLite` - should be sufficient to solve many common problems.
+On the other hand, the techniques used here - especially when migrating from `PostgreSQL` to `Core Data` `SQLite` - should be sufficient to solve many common problems.
 
 The `zsh` and `Python` scripts have been tested and run on `Ubuntu 22.04 LTS (Jammy Jellyfish)`.
 
@@ -119,13 +119,13 @@ Check if username and password are in the `~/.pgpass` file:
     localhost:5432:ITIS:<username>:<password>
     ...
 
-Roughly speaking, `convert.zsh` automates the entire conversion from the target database to the core data `.sqlite` file:
+`convert.zsh` automates the entire data migration from the source database to the target core data `.sqlite` file:
 
 <div align="center">
 ![script architecture](https://www.mascapp.com/createcoredata/img/Folien700x400/Folien700x400.001.png)
 </div>
 
-In more detail the conversion looks like this:
+In more detail:
 
 <div align="center">
 ![script architecture detail first run](https://www.mascapp.com/createcoredata/img/Folien700x700/Folien700x700.001.png)
@@ -138,8 +138,7 @@ If the script is used for conversion with other configuration value after the fi
 </div>
 
 
-
-Three steps to create the Core Data SQLite database *):
+Before the script can be started, an empty target database is needed. In order to create such a target database, the `momd` format of the target data model is needed; thus the three steps result: *):
 
 
 A.) Create `.momd` from Xcode Core Data model files `.xcdatamodeld`:
@@ -154,12 +153,11 @@ C.) Start to convert data and fill the the Core Data SQLite database:
 
    `convert.zsh -conf <conf> -username <username> -password <password>`
 
-
 *) Steps A.) and B.) are only required on the first run to obtain an empty Core Data SQLite database file
 
 ## Example
 
-In the terminal, change to `sqlite-core-data-creation`:
+In the terminal, change dir `sqlite-core-data-creation`:
 
     user@Mac sqlite-core-data-creation % cd <projects>/sqlite-core-data-creation
 
@@ -263,7 +261,8 @@ In the terminal, change to `sqlite-core-data-creation`:
 
 #### Content of dir `sqlite-core-data-creation`:
 
-    user@Mac sqlite-core-data-creation % tree -Dt  
+    user@Mac sqlite-core-data-creation % tree -Dt
+
     [Jul  8 06:41]  .
     ├── [Jul  8 06:55]  datamodel
     │   ├── [Jul 26  2021]  Taxa.xcdatamodeld
@@ -291,7 +290,7 @@ In the terminal, change to `sqlite-core-data-creation`:
         ├── [Jul  8 08:15]  exportZNAMESIDX.sql
         └── [Jul  8 08:16]  exportZPERSON.sql
 
-5.) Check
+5.) Plausibility check
 
     user@Mac sqlite-core-data-creation % sqlite3 ./data/SYSTEM.sqlite 
     SQLite version 3.37.0 2021-12-09 01:34:53
