@@ -2,7 +2,7 @@
 
 This project showing data migration to a `Core Data` compatible `SQLite` database using scripts (`zsh`, `Python`, `PL/pgSQL`, `Swift`, `SQLite and PosgreSQL SQL`) is not a ready-made solution for similar requirements in other projects, but some procedures can perhaps be adopted and some architectural features of the script solution should be usable for others.
 
-`Core Data` is a propietary persistence framework from Apple for iOS, iPhoneOS, macOS apps.
+`Core Data` is a propietary persistence framework from Apple for iPadOS, iOS, macOS apps.
 
 There are several base technologies that can be managed by `Core Data` for storing data on a file system, one is `SQLite` - and that is what we are using here.
 
@@ -28,7 +28,7 @@ On the other hand, the techniques used here - especially when migrating from `Po
 
 The `zsh` and `Python` scripts have been tested and run on `Ubuntu 22.04 LTS (Jammy Jellyfish)`.
 
-There is a little command line tool `main.swift` that runs only on `macOS`, it has been tested on a Silicon Mac with `macOS 12.4 (Monterey)` and `Xcode 13.4 (13F17a)` so far.
+There is a little Swift command line tool `sqlite-tool` that can be built and run on `macOS`, it has been tested on a Silicon Mac with `macOS 12.4 (Monterey)` and `Xcode 13.4 (13F17a)` so far. See 'Build `sqlite-tool`' below.
 
 ## Set up
 
@@ -98,6 +98,42 @@ There is a little command line tool `main.swift` that runs only on `macOS`, it h
 
 1.) Install `Xcode` Version 13.4
 
+2.) Build `sqlite-tool`:
+
+    cd src/swift/sqlite-tool-suite
+
+    user@Mac sqlite-tool-suite % tree -Dt  
+
+    user@Mac sqlite-tool-suite % swift build -c release
+
+    Fetching https://github.com/apple/swift-argument-parser from cache
+    Fetched https://github.com/apple/swift-argument-parser (0.62s)
+    Computing version for https://github.com/apple/swift-argument-parser
+    Computed https://github.com/apple/swift-argument-parser at 1.1.3 (0.43s)
+    Creating working copy for https://github.com/apple/swift-argument-parser
+    Working copy of https://github.com/apple/swift-argument-parser resolved at 1.1.3
+    Building for production...
+    [6/6] Linking sqlite-tool
+    Build complete! (10.81s)
+
+3.) Check if the built was successful
+
+    user@Mac sqlite-tool-suite % ./.build/release/sqlite-tool --help
+
+    OVERVIEW: A tool for Core Data sqlite creation and performing simple queries.
+
+    USAGE: sqlite-tool <subcommand>
+
+    OPTIONS:
+      --version               Show the version.
+      -h, --help              Show help information.
+
+    SUBCOMMANDS:
+      new (default)           Create a new Core Data SQLite file.
+      query                   Simple queries on the Taxa Core Data SQLite data base.
+
+      See 'sqlite-tool help <subcommand>' for detailed help.
+
 ## Usage 
 
 The main script is `convert.zsh`.
@@ -137,7 +173,6 @@ If the script is used for conversion with other configuration value after the fi
 ![script architecture detail](https://www.mascapp.com/createcoredata/img/Folien700x700/Folien700x700.002.png)
 </div>
 
-
 Before the script can be started, an empty target database is needed. In order to create such a target database, the `momd` format of the target data model is needed; thus the three steps result: *):
 
 
@@ -145,9 +180,9 @@ A.) Create `.momd` from Xcode Core Data model files `.xcdatamodeld`:
 
    `/Applications/Xcode.app/Contents/Developer/usr/bin/momc ../datamodel/Taxa.xcdatamodeld ../datamodel`
 
-B.) Create an empty Core Data SQLite database file with the help of `main.swift`:
+B.) Create an empty Core Data SQLite database file with the help of `sqlite-tool`:
    
-   `swift main.swift System ../datamodel/Taxa.momd ../datamodel/SYSTEM.sqlite`
+   `./swift/sqlite-tool-suite/.build/release/sqlite-tool new ../datamodel/Taxa.momd ../data/SYSTEM.sqlite System`
 
 C.) Start to convert data and fill the the Core Data SQLite database:
 
@@ -172,7 +207,9 @@ In the terminal, change dir `sqlite-core-data-creation`:
             ...
     └── [Jul  8 06:41]  src
         ├── [Jul  2 18:46]  migrate.py
-        ├── [Jul  7 19:35]  main.swift
+        └── [Jul 17 14:29]  swift
+            └── [Jul 17 14:45]  sqlite-tool-suite
+            ...
         ├── [Jul  7 20:11]  convert.zsh
         └── [Jul  8 06:03]  configuration.zsh
 
@@ -192,7 +229,9 @@ In the terminal, change dir `sqlite-core-data-creation`:
             ...
     └── [Jul  8 06:41]  src
         ├── [Jul  2 18:46]  migrate.py
-        ├── [Jul  7 19:35]  main.swift
+        └── [Jul 17 14:29]  swift
+            └── [Jul 17 14:45]  sqlite-tool-suite
+            ...
         ├── [Jul  7 20:11]  convert.zsh
         └── [Jul  8 06:03]  configuration.zsh
 
@@ -213,7 +252,9 @@ In the terminal, change dir `sqlite-core-data-creation`:
     │       └── [Jun 28 17:33]  ReadmePostgreSql.txt
     ├── [Jul  8 06:41]  src
     │   ├── [Jul  2 18:46]  migrate.py
-    │   ├── [Jul  7 19:35]  main.swift
+        └── [Jul 17 14:29]  swift
+            └── [Jul 17 14:45]  sqlite-tool-suite
+            ...
     │   ├── [Jul  7 20:11]  convert.zsh
     │   └── [Jul  8 06:03]  configuration.zsh
     └── [Jul  8 06:55]  datamodel
@@ -225,13 +266,12 @@ In the terminal, change dir `sqlite-core-data-creation`:
 3.) Create an empty Core Data SQLite database file:
 
 
-    user@Mac sqlite-core-data-creation % swift ./src/main.swift System ./datamodel/Taxa.momd ./data/SYSTEM.sqlite
-
-    Create Core Data SQLite database file:///Volumes/sambashare/sqlite-core-data-creation/data/SYSTEM.sqlite
-    Use Core Data SQLite database model file:///Volumes/sambashare/sqlite-core-data-creation/datamodel/Taxa.momd/
+    user@Mac sqlite-core-data-creation % ./src/swift/sqlite-tool-suite/.build/release/sqlite-tool new ./datamodel/Taxa.momd ./data/SYSTEM.sqlite System
+    Create Core Data SQLite database file:///Users/fama/Projekte/sqlite-core-data-creation/data/SYSTEM.sqlite
+    Use Core Data SQLite database model file:///Users/fama/Projekte/sqlite-core-data-creation/datamodel/Taxa.momd/
     Model version: 61
     Core Data SQLite database file is compatible
-    Core Data SQLite database file created file:///Volumes/sambashare/sqlite-core-data-creation/data/SYSTEM.sqlite
+    Core Data SQLite database file created file:///Users/fama/Projekte/sqlite-core-data-creation/data/SYSTEM.sqlite
 
 #### Content of dir `sqlite-core-data-creation`:
 
@@ -240,7 +280,9 @@ In the terminal, change dir `sqlite-core-data-creation`:
     [Jul  8 06:41]  .
     ├── [Jul  8 06:41]  src
     │   ├── [Jul  2 18:46]  migrate.py
-    │   ├── [Jul  7 19:35]  main.swift
+        └── [Jul 17 14:29]  swift
+            └── [Jul 17 14:45]  sqlite-tool-suite
+            ...
     │   ├── [Jul  7 20:11]  convert.zsh
     │   └── [Jul  8 06:03]  configuration.zsh
     ├── [Jul  8 06:55]  datamodel
@@ -276,7 +318,9 @@ In the terminal, change dir `sqlite-core-data-creation`:
     │   └── [Jul  8 08:17]  SYSTEM.sqlite
     └── [Jul  8 08:16]  src
         ├── [Jul  2 18:46]  migrate.py
-        ├── [Jul  7 19:35]  main.swift
+        └── [Jul 17 14:29]  swift
+            └── [Jul 17 14:45]  sqlite-tool-suite
+            ...
         ├── [Jul  7 20:11]  convert.zsh
         ├── [Jul  8 06:03]  configuration.zsh
         ├── [Jul  8 07:08]  __pycache__
@@ -290,15 +334,13 @@ In the terminal, change dir `sqlite-core-data-creation`:
         ├── [Jul  8 08:15]  exportZNAMESIDX.sql
         └── [Jul  8 08:16]  exportZPERSON.sql
 
-5.) Plausibility check
+5.) Perform some queries in the SQLite Core Data target database
 
-    user@Mac sqlite-core-data-creation % sqlite3 ./data/SYSTEM.sqlite 
-    SQLite version 3.37.0 2021-12-09 01:34:53
-    Enter ".help" for usage hints.
-    sqlite> select count(*) from ZSPEC;
+    user@Mac sqlite-core-data-creation % ./src/swift/sqlite-tool-suite/.build/release/sqlite-tool query species-info ./data/SYSTEM.sqlite ./datamodel/Taxa.momd  "Bellis perennis"
+    Taxa <Bellis perennis> found with nr = 36826
+
+    user@Mac sqlite-core-data-creation % ./src/swift/sqlite-tool-suite/.build/release/sqlite-tool query species-info ./data/SYSTEM.sqlite ./datamodel/Taxa.momd  "Apis"
+    Taxa <Apis> found with nr = 154395
+
+    user@Mac sqlite-core-data-creation % ./src/swift/sqlite-tool-suite/.build/release/sqlite-tool query count-species ./data/SYSTEM.sqlite ./datamodel/Taxa.momd
     631087
-    sqlite> select count(*) from ZNAMESIDX;
-    2895066
-    sqlite> .exit
-
-    user@Mac sqlite-core-data-creation % 
