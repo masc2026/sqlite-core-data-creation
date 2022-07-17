@@ -102,8 +102,6 @@ There is a little Swift command line tool `sqlite-tool` that can be built and ru
 
     cd src/swift/sqlite-tool-suite
 
-    user@Mac sqlite-tool-suite % tree -Dt  
-
     user@Mac sqlite-tool-suite % swift build -c release
 
     Fetching https://github.com/apple/swift-argument-parser from cache
