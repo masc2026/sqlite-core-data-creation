@@ -1,16 +1,16 @@
 #!/bin/zsh
 
 #  Created by Markus Schmid on 28.06.22.
-#  Copyright © 2022 Markus Schmid. All rights reserved.
+#  Updated by Markus Schmid on 31.10.25.
+#  Copyright © 2025 Markus Schmid. All rights reserved.
 
 # 
 # command syntax:
-# ./convert.zsh -conf <confiduration> -username <username> -password <password>
+# ./convert.zsh -conf <configuration> -username <username> -password <password>
 # 
 #####################
 # nano ~/.pgpass
 # localhost:5432:GERMANSL:<username>:<password>
-# localhost:5432:nutzer:<username>:<password>
 # localhost:5432:ITIS:<username>:<password>
 #####################
 
@@ -826,26 +826,28 @@ EOT
 
 function rawimport_itis_v1 {
    readonly file=${1:?"For ITIS import the dump filenname must be specified"}
-   echo "Importing data into Postgres ..."
+   local tmp_file=${file:r}.tmp.sql
+
+   echo "Importing $file data into Postgres ..."
 
    echo "migrate PostgreSQL dump file to UTF8 "
+
+   rm -f $tmp_file
+
+   iconv -f iso-8859-1 -t utf-8 $file > $tmp_file
    
-   rm -f ITIS.tmp.sql 
+   sed -i "s/ENCODING = 'LATIN1'/ENCODING = 'UTF8'/g" $tmp_file
 
-   iconv -f iso-8859-1 -t utf-8 $file > ITIS.tmp.sql 
+   sed -i "s/LC_COLLATE = 'en_US.ISO8859-1'/LC_COLLATE = 'de_DE.UTF-8'/g" $tmp_file
 
-   sed -i "s/ENCODING = 'LATIN1'/ENCODING = 'UTF8'/g" ITIS.tmp.sql 
+   sed -i "s/LC_CTYPE = 'en_US.ISO8859-1'/LC_CTYPE = 'de_DE.UTF-8'/g" $tmp_file 
 
-   sed -i "s/LC_COLLATE = 'en_US.ISO8859-1'/LC_COLLATE = 'de_DE.UTF-8'/g" ITIS.tmp.sql 
-
-   sed -i "s/LC_CTYPE = 'en_US.ISO8859-1'/LC_CTYPE = 'de_DE.UTF-8'/g" ITIS.tmp.sql 
-
-   sed -i "s/client_encoding = 'LATIN1'/client_encoding = 'UTF8'/g" ITIS.tmp.sql 
+   sed -i "s/client_encoding = 'LATIN1'/client_encoding = 'UTF8'/g" $tmp_file 
 
    echo "Create database and tables and import data"
  
-   psql $CONF[USERNAMEPOSTGRES] $CONF[USERNAMEPOSTGRES] < ITIS.tmp.sql
-
+   psql $CONF[USERNAMEPOSTGRES] $CONF[USERNAMEPOSTGRES] < $tmp_file
+   
    psql $CONF[BACKBONE] $CONF[USERNAMEPOSTGRES] <<EOF
    set client_min_messages = warning;
 
@@ -1101,7 +1103,7 @@ function rawimport_itis_v1 {
    \$BODY\$
    LANGUAGE 'plpgsql';
 EOF
-   rm ITIS.tmp.sql
+   rm $tmp_file
 }
 
 #############################
@@ -1247,6 +1249,7 @@ function exportapp_insert() {
       sed -i '/SELECT/d' export$table.sql
       sed -i '/--/d' export$table.sql
       sed -i '/SET/d' export$table.sql
+      sed -i '/^\\/d' export$table.sql
       sed -i "s/public\.//g" export$table.sql
       sed -i '/^[[:space:]]*$/d' export$table.sql
       sed -i '1s/^/DELETE FROM '$table';\n/' export$table.sql
@@ -1341,7 +1344,7 @@ then
 fi
 
 CONFNAME=$args[-conf]
-set -A CONF ${(kv)${(P)CONFNAME}}
+CONF=( ${(kv)${(P)CONFNAME}} ) 
 
 if [ -z "$args[-username]" ]
 then
@@ -1580,6 +1583,7 @@ synonyms
 rm -f tmp1.sql
 echo "\n###################################\nPrepare Specindex\n###################################"
 specindex_prepare > tmp1.sql
+#break 2> /dev/null
 echo "\n###################################\nInsert Specindex\n###################################"
 specindex_insert tmp1.sql
 echo "\n###################################\nInsert Namesindex\n###################################"

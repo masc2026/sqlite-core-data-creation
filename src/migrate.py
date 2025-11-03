@@ -1,22 +1,21 @@
 # coding:UTF-8
 
 #  Created by Markus Schmid on 28.06.22.
-#  Copyright © 2022 Markus Schmid. All rights reserved.
+#  Updated by Markus Schmid on 31.10.25.
+#  Copyright © 2025 Markus Schmid. All rights reserved.
 
+import json
 import re
 import sqlite3
-import psycopg2
-import psycopg2.extras
-import time
-from datetime import datetime, date;
-import uuid
-import image
 import sys
-import json
 import uuid
-from collections import namedtuple
 import plistlib
 import xml.etree.ElementTree as ET
+from collections import namedtuple
+from datetime import datetime, date
+
+import psycopg2
+import psycopg2.extras
 
 ROWNR = 0
 
@@ -122,7 +121,7 @@ def genIndex(handle,minpatlen,maxpatlen,startnr):
     
 def genupdateIndex(specnr,text,minpatlen,maxpatlen):
     try:
-        text = re.sub(' sp\.| spec\. | species| gat\.| gen\.| subsp\.| ssp\.| auct\.| var\.| s\. l\.| s\.l\.| s\. str\.| s\.str\.|', '', text)
+        text = re.sub(r' sp\.| spec\. | species| gat\.| gen\.| subsp\.| ssp\.| auct\.| var\.| s\. l\.| s\.l\.| s\. str\.| s\.str\.|', '', text)
         ## Words<minpatlen
         try:
             words=re.findall(r'[a-zA-ZöäüÖÄÜßâêûôîÂÊÛÔÎéúóáíÉÚÓÁÍèùòàìÈÙÒÀÌîÎçÇËëïÏñõÕãÃ„]+',text)
@@ -145,7 +144,7 @@ def genupdateIndex(specnr,text,minpatlen,maxpatlen):
 
 def genupdateIndexTest(text,minpatlen,maxpatlen):
     try:
-        text = re.sub(' sp\.| spec\. | species| gat\.| gen\.| subsp\.| ssp\.| auct\.| var\.| s\. l\.| s\.l\.| s\. str\.| s\.str\.|', '', text)
+        text = re.sub(r' sp\.| spec\. | species| gat\.| gen\.| subsp\.| ssp\.| auct\.| var\.| s\. l\.| s\.l\.| s\. str\.| s\.str\.|', '', text)
         ## Words<minpatlen
         try:
             words=re.findall(r'[a-zA-ZöäüÖÄÜßâêûôîÂÊÛÔÎéúóáíÉÚÓÁÍèùòàìÈÙÒÀÌîÎçÇËëïÏñõÕãÃ„]+',text)
@@ -223,7 +222,6 @@ def roottaxaUpdate(handle,roottaxa):
         roottaxaarray = roottaxa.split(",")
         ## znr in update Tabelle durchlaufen:
         sql="select znr,zaggsranks,zaggs FROM \"ZSPEC\" where znr in (%s)" % (roottaxa)
-        # print(sql)
         cursor.execute(sql)
         rows = cursor.fetchall()
         zaggsdict={}
@@ -254,7 +252,6 @@ def roottaxaUpdate(handle,roottaxa):
             else:
                 sql = sql + " or\n"
             i=i+1
-        #print(sql)
         cursor.execute(sql)
         handle.commit()
         if (len(zaggs) > 0):
