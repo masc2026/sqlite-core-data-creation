@@ -1,5 +1,29 @@
 # Create SQLite Core Data database file for use with an iOS app
 
+Das Repo enthält eine Daten-Pipeline, die zeigt, wie man große, Datensätze (als Beispiel: öffentliche, taxonomische Daten von ITIS oder GermanSL) in eine Apple Core Data kompatible SQLite-Datenbank für eine iOS-App migriert.
+
+Da Apple keinen direkten SQL-Zugriff oder eine Dokumentation für das Pre-Loading von Core Data-Datenbanken bereitstellt, wurde etwas Reverse Engineering gemacht.
+
+Der Prozess ist in zwei Hauptteile gegliedert:
+
+Vorbereitung/Erstellung der Zieldatenbank (macOS):
+
+Ein Xcode xcdatamodeld (Taxa.xcdatamodeld) definiert das Schema.
+
+Ein Swift-Kommandozeilen-Tool (sqlite-tool-suite) wird verwendet, um eine leere SYSTEM.sqlite-Datei zu erstellen, die das korrekte, proprietäre Core Data-Schema und alle Metadaten-Tabellen (Z_METADATA, Z_PRIMARYKEY etc.) enthält.
+
+Daten-ETL (Linux/Arch):
+
+Ein zsh-Orchestrierungs-Skript (convert.zsh) verwaltet den gesamten Prozess.
+
+Es lädt die Rohdaten (z.B. ITIS.sql) in eine PostgreSQL-Zwischendatenbank.
+
+Ein Python-Skript (migrate.py mit psycopg2) wird aufgerufen, um die Daten zu transformieren, Hierarchien (ZAGGS) aufzubauen, Synonyme zu verarbeiten und einen rechenintensiven N-Gramm-Suchindex (ZSPECINDEX) zu erstellen.
+
+Abschließend exportiert das Skript die bereinigten Daten per pg_dump und lädt sie mittels sqlite3 in die von Swift erstellte Zieldatenbank.
+
+----
+
 This project showing data migration to a `Core Data` compatible `SQLite` database using scripts (`zsh`, `Python`, `PL/pgSQL`, `Swift`, `SQLite and PosgreSQL SQL`) is not a ready-made solution for similar requirements in other projects, but some procedures can perhaps be adopted and some architectural features of the script solution should be usable for others.
 
 `Core Data` is a propietary persistence framework from Apple for iPadOS, iOS, macOS apps.
@@ -104,7 +128,7 @@ sudo pacman -S dbeaver
 
 *Note on Java:* When installing `dbeaver`, `pacman` will ask you to choose a Java Runtime provider. A good and lightweight choice is `jre21-openjdk`.
 
-3.) (Optional) Configure PostgreSQL to use a custom data directory.
+3.) Configure PostgreSQL to use a custom data directory.
 This is useful if you want to store your data on a separate drive (e.g., an SSD mounted at /mnt/datassd).
 
 a. Create the new directories and set permissions (replace `/mnt/datassd` with your path):
