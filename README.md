@@ -1,26 +1,24 @@
 # Create SQLite Core Data database file for use with an iOS app
 
-Das Repo enthält eine Daten-Pipeline, die zeigt, wie man große, Datensätze (als Beispiel: öffentliche, taxonomische Daten von ITIS oder GermanSL) in eine Apple Core Data kompatible SQLite-Datenbank für eine iOS-App migriert.
+Eine Daten-Pipeline, die Datensätze (als Beispiel taxonomische Daten von `ITIS` oder `GermanSL`) in eine Apple `Core Data` kompatible `SQLite`-Datenbank für eine iOS-App migriert.
 
-Da Apple keinen direkten SQL-Zugriff oder eine Dokumentation für das Pre-Loading von Core Data-Datenbanken bereitstellt, wurde etwas Reverse Engineering gemacht.
+Der Workflow hat zwei Teile:
 
-Der Prozess ist in zwei Hauptteile gegliedert:
+1. **Vorbereitung/Erstellung der Zieldatenbank (macOS):**
 
-Vorbereitung/Erstellung der Zieldatenbank (macOS):
+   * Ein Xcode `xcdatamodeld` (`Taxa.xcdatamodeld`) definiert das Schema.
 
-Ein Xcode xcdatamodeld (Taxa.xcdatamodeld) definiert das Schema.
+   * Ein `Swift`-Kommandozeilen-Tool (`sqlite-tool-suite`) wird verwendet, um eine *leere* `SYSTEM.sqlite`-Datei zu erstellen, die das korrekte, proprietäre Core Data-Schema und alle Metadaten-Tabellen (`Z_METADATA`, `Z_PRIMARYKEY` etc.) enthält.
 
-Ein Swift-Kommandozeilen-Tool (sqlite-tool-suite) wird verwendet, um eine leere SYSTEM.sqlite-Datei zu erstellen, die das korrekte, proprietäre Core Data-Schema und alle Metadaten-Tabellen (Z_METADATA, Z_PRIMARYKEY etc.) enthält.
+2. **Daten-ETL (Linux/Arch):**
 
-Daten-ETL (Linux/Arch):
+   * Ein `zsh`-Skript (`convert.zsh`) verwaltet den gesamten Prozess.
 
-Ein zsh-Orchestrierungs-Skript (convert.zsh) verwaltet den gesamten Prozess.
+   * Es lädt die Rohdaten (z.B. `ITIS.sql`) in eine `PostgreSQL`-Zwischendatenbank.
 
-Es lädt die Rohdaten (z.B. ITIS.sql) in eine PostgreSQL-Zwischendatenbank.
+   * Ein `Python`-Skript (`migrate.py` mit `psycopg2`) wird aufgerufen, um die Daten zu transformieren, Hierarchien (`ZAGGS`) aufzubauen, Synonyme zu verarbeiten und einen Suchindex (`ZSPECINDEX`) zu erstellen.
 
-Ein Python-Skript (migrate.py mit psycopg2) wird aufgerufen, um die Daten zu transformieren, Hierarchien (ZAGGS) aufzubauen, Synonyme zu verarbeiten und einen rechenintensiven N-Gramm-Suchindex (ZSPECINDEX) zu erstellen.
-
-Abschließend exportiert das Skript die bereinigten Daten per pg_dump und lädt sie mittels sqlite3 in die von Swift erstellte Zieldatenbank.
+   * Abschließend exportiert das Skript die bereinigten Daten per `pg_dump` und lädt sie mit `sqlite3` in die mit Swift erstellte Zieldatenbank.
 
 ----
 
@@ -38,7 +36,7 @@ Due to the lack of documentation, a little research and experimentation was done
 
 So the project now shows a tested workflow and scripts that work well.
 
-I have often created `Core Data` compliant `SQLite` database files and shipped them directly with an iOS app.
+I have often created `Core Data` compliant `SQLite` database files and shipped them directly with an older iOS app ([App Manual](https://drive.google.com/file/d/1Vi8G3tcm_xNRM7rVRlazCnU-4urAx9Nd/view?usp=drive_link)).
 
 ## Getting started
 
