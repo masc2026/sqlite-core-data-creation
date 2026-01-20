@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20F71" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="57">
+    <entity name="BACKBONE" representedClassName="BACKBONE" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="cert" optional="YES" attributeType="String"/>
+        <attribute name="citation" optional="YES" attributeType="String"/>
+        <attribute name="copyright" optional="YES" attributeType="String"/>
+        <attribute name="filetype" optional="YES" attributeType="String"/>
+        <attribute name="info" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="namelangs" optional="YES" attributeType="String"/>
+        <attribute name="nativelang" optional="YES" attributeType="String"/>
+        <attribute name="nr" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="published" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="ranklangs" optional="YES" attributeType="String"/>
+        <attribute name="roottaxa" optional="YES" attributeType="String"/>
+        <attribute name="source" optional="YES" attributeType="String"/>
+        <attribute name="sourcetype" optional="YES" attributeType="String"/>
+        <attribute name="specscounter" optional="YES" attributeType="String"/>
+        <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="uuid" optional="YES" attributeType="String"/>
+        <attribute name="version" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="BOOKMARK" representedClassName="BOOKMARK" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="abbrev" optional="YES" attributeType="String"/>
+        <attribute name="bbnr" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" versionHashModifier="Taxa17"/>
+        <attribute name="childs" optional="YES" attributeType="String"/>
+        <attribute name="level" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="objectid" optional="YES" attributeType="String"/>
+        <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="parents" optional="YES" attributeType="String"/>
+        <attribute name="rankobjectid" optional="YES" attributeType="String"/>
+        <attribute name="selected" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="setnr" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="specnr" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="total" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
+        <fetchIndex name="byAbbrevIndex">
+            <fetchIndexElement property="abbrev" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byBbnrIndex">
+            <fetchIndexElement property="bbnr" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byLevelIndex">
+            <fetchIndexElement property="level" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byParentsIndex">
+            <fetchIndexElement property="parents" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySelectedIndex">
+            <fetchIndexElement property="selected" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySetnrIndex">
+            <fetchIndexElement property="setnr" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySpecnrIndex">
+            <fetchIndexElement property="specnr" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byTotalIndex">
+            <fetchIndexElement property="total" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="GENERICLINK" representedClassName="GENERICLINK" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="comment" optional="YES" attributeType="String"/>
+        <attribute name="md" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="section" optional="YES" attributeType="String"/>
+        <attribute name="sectionnr" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
+        <relationship name="sets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GENERICLINKSET" inverseName="links" inverseEntity="GENERICLINKSET"/>
+        <fetchIndex name="byMdIndex">
+            <fetchIndexElement property="md" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byNameIndex">
+            <fetchIndexElement property="name" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySectionIndex">
+            <fetchIndexElement property="section" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySectionnrIndex">
+            <fetchIndexElement property="sectionnr" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byTypeIndex">
+            <fetchIndexElement property="type" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="GENERICLINKSET" representedClassName="GENERICLINKSET" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="bbnr" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="speckey" optional="YES" attributeType="String"/>
+        <attribute name="specnr" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
+        <relationship name="links" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="GENERICLINK" inverseName="sets" inverseEntity="GENERICLINK"/>
+        <relationship name="specs" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="SPECDETAIL" inverseName="genericlinksets" inverseEntity="SPECDETAIL"/>
+        <fetchIndex name="byNameIndex">
+            <fetchIndexElement property="name" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="compoundIndex">
+            <fetchIndexElement property="name" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="IMAGE" representedClassName="IMAGE" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="crcomment" optional="YES" attributeType="String"/>
+        <attribute name="height" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="imagelink" optional="YES" attributeType="String"/>
+        <attribute name="index" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="info" optional="YES" attributeType="String"/>
+        <attribute name="md" optional="YES" attributeType="String"/>
+        <attribute name="section" optional="YES" attributeType="String"/>
+        <attribute name="sectionnr" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="speckey" optional="YES" attributeType="String" versionHashModifier="Taxa28"/>
+        <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="thumb" optional="YES" attributeType="Binary"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="width" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
+        <relationship name="copyright" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PERSON" inverseName="images" inverseEntity="PERSON"/>
+        <relationship name="keywords" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="IMAGEKEYWORD" inverseName="image" inverseEntity="IMAGEKEYWORD"/>
+        <relationship name="observation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OBSERVATION" inverseName="photos" inverseEntity="OBSERVATION"/>
+        <relationship name="spec" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SPECDETAIL" inverseName="images" inverseEntity="SPECDETAIL"/>
+        <fetchIndex name="byMdIndex">
+            <fetchIndexElement property="md" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySectionIndex">
+            <fetchIndexElement property="section" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySectionnrIndex">
+            <fetchIndexElement property="sectionnr" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="IMAGEKEYWORD" representedClassName="IMAGEKEYWORD" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="key" optional="YES" attributeType="String" versionHashModifier="Taxa28"/>
+        <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="value" optional="YES" attributeType="String"/>
+        <relationship name="image" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="IMAGE" inverseName="keywords" inverseEntity="IMAGE"/>
+        <fetchIndex name="byKeyIndex">
+            <fetchIndexElement property="key" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="INFO" representedClassName="INFO" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="data" optional="YES" attributeType="String"/>
+        <attribute name="datatype" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="md" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="section" optional="YES" attributeType="String"/>
+        <attribute name="sectionnr" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <relationship name="spec" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SPECDETAIL" inverseName="infos" inverseEntity="SPECDETAIL"/>
+        <fetchIndex name="byMdIndex">
+            <fetchIndexElement property="md" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byNameIndex">
+            <fetchIndexElement property="name" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySectionIndex">
+            <fetchIndexElement property="section" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySectionnrIndex">
+            <fetchIndexElement property="sectionnr" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byTypeIndex">
+            <fetchIndexElement property="type" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="LINK" representedClassName="LINK" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="bbnr" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="comment" optional="YES" attributeType="String"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="index" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="md" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="section" optional="YES" attributeType="String"/>
+        <attribute name="sectionnr" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="speckey" optional="YES" attributeType="String"/>
+        <attribute name="specnr" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
+        <relationship name="spec" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SPECDETAIL" inverseName="links" inverseEntity="SPECDETAIL"/>
+        <fetchIndex name="byMdIndex">
+            <fetchIndexElement property="md" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byNameIndex">
+            <fetchIndexElement property="name" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySectionIndex">
+            <fetchIndexElement property="section" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySectionnrIndex">
+            <fetchIndexElement property="sectionnr" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byTypeIndex">
+            <fetchIndexElement property="type" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="LOCATION" representedClassName="LOCATION" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="altitude" optional="YES" attributeType="String"/>
+        <attribute name="comment" optional="YES" attributeType="String"/>
+        <attribute name="latitude" optional="YES" attributeType="String"/>
+        <attribute name="longitude" optional="YES" attributeType="String"/>
+        <attribute name="md" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="section" optional="YES" attributeType="String"/>
+        <attribute name="sectionnr" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <relationship name="observations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OBSERVATION" inverseName="location" inverseEntity="OBSERVATION"/>
+        <fetchIndex name="byLatitudeIndex">
+            <fetchIndexElement property="latitude" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byLongitudeIndex">
+            <fetchIndexElement property="longitude" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byMdIndex">
+            <fetchIndexElement property="md" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byNameIndex">
+            <fetchIndexElement property="name" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySectionIndex">
+            <fetchIndexElement property="section" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySectionnrIndex">
+            <fetchIndexElement property="sectionnr" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="NAMESIDX" representedClassName="NAMESIDX" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="pattern" optional="YES" attributeType="String"/>
+        <attribute name="specnr" optional="YES" attributeType="String"/>
+        <fetchIndex name="byPatternIndex">
+            <fetchIndexElement property="pattern" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="OBSERVATION" representedClassName="OBSERVATION" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="altitude" optional="YES" attributeType="String"/>
+        <attribute name="comment" optional="YES" attributeType="String"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="latitude" optional="YES" attributeType="String"/>
+        <attribute name="longitude" optional="YES" attributeType="String"/>
+        <attribute name="md" optional="YES" attributeType="String"/>
+        <attribute name="remarks" optional="YES" attributeType="String"/>
+        <attribute name="section" optional="YES" attributeType="String"/>
+        <attribute name="sectionnr" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LOCATION" inverseName="observations" inverseEntity="LOCATION"/>
+        <relationship name="observer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PERSON" inverseName="observer" inverseEntity="PERSON"/>
+        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="IMAGE" inverseName="observation" inverseEntity="IMAGE"/>
+        <relationship name="spec" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SPECDETAIL" inverseName="observations" inverseEntity="SPECDETAIL"/>
+        <fetchIndex name="byMdIndex">
+            <fetchIndexElement property="md" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySectionIndex">
+            <fetchIndexElement property="section" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySectionnrIndex">
+            <fetchIndexElement property="sectionnr" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="OWNER" representedClassName="OWNER" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="changed" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="md" optional="YES" attributeType="String"/>
+        <relationship name="person" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PERSON" inverseName="owner" inverseEntity="PERSON"/>
+    </entity>
+    <entity name="PERSON" representedClassName="PERSON" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="address" optional="YES" attributeType="String"/>
+        <attribute name="country" optional="YES" attributeType="String"/>
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="firstname" optional="YES" attributeType="String"/>
+        <attribute name="gender" optional="YES" attributeType="String"/>
+        <attribute name="institution" optional="YES" attributeType="String"/>
+        <attribute name="language" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="lastname" optional="YES" attributeType="String"/>
+        <attribute name="md" optional="YES" attributeType="String"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="tel" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="images" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="IMAGE" inverseName="copyright" inverseEntity="IMAGE"/>
+        <relationship name="observer" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="OBSERVATION" inverseName="observer" inverseEntity="OBSERVATION"/>
+        <relationship name="owner" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="OWNER" inverseName="person" inverseEntity="OWNER"/>
+        <relationship name="setauthor" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="SET" inverseName="author" inverseEntity="SET"/>
+        <relationship name="traitsauthor" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="TRAIT" inverseName="author" inverseEntity="TRAIT"/>
+        <fetchIndex name="byFirstnameIndex">
+            <fetchIndexElement property="firstname" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byLastnameIndex">
+            <fetchIndexElement property="lastname" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byNameIndex">
+            <fetchIndexElement property="name" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="RANK" representedClassName="RANK" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="abbrev" optional="YES" attributeType="String"/>
+        <attribute name="color" optional="YES" attributeType="String"/>
+        <attribute name="de_name" optional="YES" attributeType="String"/>
+        <attribute name="en_name" optional="YES" attributeType="String"/>
+        <attribute name="fr_name" optional="YES" attributeType="String"/>
+        <attribute name="icon" optional="YES" attributeType="String"/>
+        <attribute name="kingdom" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="level" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="sci_name" optional="YES" attributeType="String"/>
+        <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+    </entity>
+    <entity name="SEARCH" representedClassName="SEARCH" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="bbnr" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="match" optional="YES" attributeType="String"/>
+        <attribute name="objectid" optional="YES" attributeType="String"/>
+        <attribute name="pattern" optional="YES" attributeType="String"/>
+        <attribute name="spec" optional="YES" transient="YES"/>
+        <attribute name="specnr" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <fetchIndex name="byBbnrIndex">
+            <fetchIndexElement property="bbnr" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byMatchIndex">
+            <fetchIndexElement property="match" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byPatternIndex">
+            <fetchIndexElement property="pattern" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byTimestampIndex">
+            <fetchIndexElement property="timestamp" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="SET" representedClassName="SET" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="changed" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="comment" optional="YES" attributeType="String"/>
+        <attribute name="created" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="nr" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PERSON" inverseName="setauthor" inverseEntity="PERSON"/>
+        <fetchIndex name="byNrIndex">
+            <fetchIndexElement property="nr" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byTypeIndex">
+            <fetchIndexElement property="type" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="SPEC" representedClassName="SPEC" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="aggs" optional="YES" attributeType="String"/>
+        <attribute name="aggsranks" optional="YES" attributeType="String"/>
+        <attribute name="attributes" optional="YES" attributeType="String"/>
+        <attribute name="childs" optional="YES" attributeType="String"/>
+        <attribute name="de_name" optional="YES" attributeType="String"/>
+        <attribute name="en_name" optional="YES" attributeType="String"/>
+        <attribute name="fr_name" optional="YES" attributeType="String"/>
+        <attribute name="icon" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="images" optional="YES" attributeType="String"/>
+        <attribute name="info" optional="YES" attributeType="String"/>
+        <attribute name="nr" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="owner" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="rank" optional="YES" attributeType="String"/>
+        <attribute name="sci_name" optional="YES" attributeType="String"/>
+        <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="synonyms" optional="YES" attributeType="String"/>
+        <attribute name="uuid" optional="YES" attributeType="String"/>
+        <attribute name="valid_nr" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
+        <fetchIndex name="byNrIndex">
+            <fetchIndexElement property="nr" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byRankIndex">
+            <fetchIndexElement property="rank" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySci_nameIndex">
+            <fetchIndexElement property="sci_name" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byStatusIndex">
+            <fetchIndexElement property="status" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="SPECDETAIL" representedClassName="SPECDETAIL" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="abbrev" optional="YES" attributeType="String"/>
+        <attribute name="bbnr" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="inheritgl" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO"/>
+        <attribute name="level" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="objectid" optional="YES" attributeType="String"/>
+        <attribute name="rankobjectid" optional="YES" attributeType="String"/>
+        <attribute name="specnr" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
+        <relationship name="genericlinksets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GENERICLINKSET" inverseName="specs" inverseEntity="GENERICLINKSET"/>
+        <relationship name="images" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="IMAGE" inverseName="spec" inverseEntity="IMAGE"/>
+        <relationship name="infos" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="INFO" inverseName="spec" inverseEntity="INFO"/>
+        <relationship name="links" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="LINK" inverseName="spec" inverseEntity="LINK"/>
+        <relationship name="observations" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="OBSERVATION" inverseName="spec" inverseEntity="OBSERVATION"/>
+        <relationship name="traits" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="TRAIT" inverseName="spec" inverseEntity="TRAIT"/>
+        <fetchIndex name="byAbbrevIndex">
+            <fetchIndexElement property="abbrev" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byBbnrIndex">
+            <fetchIndexElement property="bbnr" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byLevelIndex">
+            <fetchIndexElement property="level" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySpecnrIndex">
+            <fetchIndexElement property="specnr" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="SPECINDEX" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="bbnr" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="column" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="len" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="nr" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="pattern" optional="YES" attributeType="String"/>
+        <attribute name="pos" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="specnr" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
+        <fetchIndex name="byLenIndex">
+            <fetchIndexElement property="len" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byPatternIndex">
+            <fetchIndexElement property="pattern" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="TRAIT" representedClassName="TRAIT" versionHashModifier="Taxa55" syncable="YES">
+        <attribute name="category" optional="YES" attributeType="String"/>
+        <attribute name="comment" optional="YES" attributeType="String"/>
+        <attribute name="index" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="info" optional="YES" attributeType="String"/>
+        <attribute name="key" optional="YES" attributeType="String"/>
+        <attribute name="md" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="nr" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="section" optional="YES" attributeType="String"/>
+        <attribute name="sectionnr" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PERSON" inverseName="traitsauthor" inverseEntity="PERSON"/>
+        <relationship name="spec" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SPECDETAIL" inverseName="traits" inverseEntity="SPECDETAIL"/>
+        <fetchIndex name="byCategoryIndex">
+            <fetchIndexElement property="category" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byKeyIndex">
+            <fetchIndexElement property="key" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byMdIndex">
+            <fetchIndexElement property="md" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byNameIndex">
+            <fetchIndexElement property="name" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byNrIndex">
+            <fetchIndexElement property="nr" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySectionIndex">
+            <fetchIndexElement property="section" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySectionnrIndex">
+            <fetchIndexElement property="sectionnr" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <configuration name="Config">
+        <memberEntity name="BACKBONE"/>
+    </configuration>
+    <configuration name="System">
+        <memberEntity name="SPEC"/>
+        <memberEntity name="RANK"/>
+        <memberEntity name="NAMESIDX"/>
+    </configuration>
+    <configuration name="User">
+        <memberEntity name="BOOKMARK"/>
+        <memberEntity name="IMAGE"/>
+        <memberEntity name="PERSON"/>
+        <memberEntity name="SEARCH"/>
+        <memberEntity name="SET"/>
+        <memberEntity name="IMAGEKEYWORD"/>
+        <memberEntity name="TRAIT"/>
+        <memberEntity name="SPECDETAIL"/>
+        <memberEntity name="OBSERVATION"/>
+        <memberEntity name="LOCATION"/>
+        <memberEntity name="LINK"/>
+        <memberEntity name="GENERICLINK"/>
+        <memberEntity name="OWNER"/>
+    </configuration>
+    <elements>
+        <element name="BACKBONE" positionX="-74" positionY="-144" width="128" height="313"/>
+        <element name="BOOKMARK" positionX="-279" positionY="-216" width="128" height="238"/>
+        <element name="GENERICLINK" positionX="-279" positionY="585" width="128" height="163"/>
+        <element name="GENERICLINKSET" positionX="-486" positionY="576" width="128" height="133"/>
+        <element name="IMAGE" positionX="-711" positionY="-252" width="128" height="328"/>
+        <element name="IMAGEKEYWORD" positionX="-486" positionY="-252" width="128" height="118"/>
+        <element name="INFO" positionX="-1152" positionY="171" width="128" height="163"/>
+        <element name="LINK" positionX="-486" positionY="234" width="126" height="238"/>
+        <element name="LOCATION" positionX="-281" positionY="81" width="128" height="178"/>
+        <element name="NAMESIDX" positionX="81" positionY="-369" width="128" height="73"/>
+        <element name="OBSERVATION" positionX="-486" positionY="-45" width="128" height="238"/>
+        <element name="OWNER" positionX="-1152" positionY="458" width="128" height="88"/>
+        <element name="PERSON" positionX="-936" positionY="233" width="128" height="298"/>
+        <element name="RANK" positionX="-74" positionY="-369" width="128" height="193"/>
+        <element name="SEARCH" positionX="-74" positionY="207" width="128" height="148"/>
+        <element name="SET" positionX="-704" positionY="716" width="128" height="148"/>
+        <element name="SPEC" positionX="81" positionY="-108" width="128" height="313"/>
+        <element name="SPECDETAIL" positionX="-936" positionY="-43" width="128" height="238"/>
+        <element name="SPECINDEX" positionX="81" positionY="-279" width="128" height="148"/>
+        <element name="TRAIT" positionX="-281" positionY="297" width="128" height="238"/>
+    </elements>
+</model>
